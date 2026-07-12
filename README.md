@@ -15,7 +15,7 @@ A Winsock2 socket abstraction built around three classes:
 - **`ConnectedSocket`** — represents one accepted client connection, 
   used for reading requests and sending responses
 
-### Thread Pool (`src/thread/`)
+### Thread Pool (`src/thread pool`)
 A task based thread pool for handling accepted connections 
 concurrently. Accepted `ConnectedSocket`s are handed off as 
 tasks to worker threads, so the listening loop is never blocked 
