@@ -4,8 +4,9 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <windows.h>
-
+#include <cstddef>
 void initWinSock();
+
 
 
 class SocketWrapper {
@@ -16,24 +17,21 @@ class SocketWrapper {
     public:
         SocketWrapper();
         SocketWrapper(SOCKET created);
+        SOCKET getSocket();
         virtual ~SocketWrapper();
 };
 
-
 class ListeningSocket : public SocketWrapper {
-    private:
-        const int MAX_CON = 5;
-
+    
     protected:
         void bindSocket();
         int setListen();
-        int acceptConnect();
 
     public:
         ListeningSocket();
         ~ListeningSocket();
 
-        void start();
+        int setup();
 };
 
 
@@ -41,5 +39,8 @@ class ConnectedSocket : public SocketWrapper {
     public:
         ConnectedSocket();
         ConnectedSocket(SOCKET created);
+        int send();
+        void start();
+        
         ~ConnectedSocket();
 };

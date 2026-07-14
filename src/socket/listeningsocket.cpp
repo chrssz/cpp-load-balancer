@@ -26,42 +26,28 @@ void ListeningSocket::bindSocket() {
         WSACleanup();
     }
     
-    bind(this->s, result->ai_addr, result->ai_addrlen);
+    if(bind(this->s, result->ai_addr, result->ai_addrlen) == SOCKET_ERROR){
+        std::cout << "Bind failed! " << WSAGetLastError() << std::endl;
+        freeaddrinfo(result);
+    }
+
     freeaddrinfo(result);
+    std::cout << "Successfull bind to Listening Socket" << std::endl;
 }
 
 
 int ListeningSocket::setListen() {
-    return listen(s, MAX_CON);
+    return listen(s, 0);
 }
 
 
-int ListeningSocket::acceptConnect() {
+int ListeningSocket::setup() {
+    this->bindSocket();
 
-    SOCKET clientSocket = accept(s, nullptr, nullptr);
-    
-
-    if (clientSocket == INVALID_SOCKET)
-    {
+    if(this->setListen() == -1){
         return -1;
     }
 
-    ConnectedSocket new_socket(clientSocket);
-    //Add this connected socket to a socket manager.
-    //TBD...
-    return 0;
-}
-
-
-void ListeningSocket::start() {
-    bindSocket();
-
-    if(setListen() == -1){
-        return;
-    }
-
-    while (true){
-        acceptConnect();
-    }
+    return 1;
     
 }
