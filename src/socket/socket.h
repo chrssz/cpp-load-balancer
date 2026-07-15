@@ -40,7 +40,7 @@ class ConnectedSocket : public SocketWrapper {
         ConnectedSocket();
         ConnectedSocket(SOCKET created);
         int send();
-        void start();
+        int receive();
         
         ~ConnectedSocket();
 };

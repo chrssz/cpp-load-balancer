@@ -15,8 +15,7 @@ ThreadPool::ThreadPool(int workerSize){
                     #What if none are available.. we continue loop. This can be Costly
         #*Waiting for ongoing tasks can be costly. This is true for all listeners
 
-    #TODO: Address the cpu cost for all listeners, (in main, here in start, and connectedSockets)
-           Investiagate a startegy to avoid a O(T_SIZE * N_WORKERS) time complexity check.
+    #TODO: Investiagate a startegy to avoid a O(T_SIZE * N_WORKERS) time complexity check.
            Handle worker.h try-except. Approach it with a RAII design to keep code clean.
 */
 void ThreadPool::start(){
