@@ -1,6 +1,6 @@
-#include "worker.h"
+#include "worker.hpp"
 
-Worker::Worker(){}
+Worker::Worker(int id) : id(id){}
 
 bool Worker::isAvailable(){
     return this->available;
@@ -9,11 +9,14 @@ bool Worker::isAvailable(){
 void Worker::doTask(std::function<void()> &&task){
     std::function<void()> toDo = std::move(task);
     this->available = false;
-    //Clean this up with RAII In the future...
+
     try{
+        std::cout << "Attempting task from Worker " << this->id << std::endl;
         toDo();
+
+        std::cout << "Task Ran!";
     } catch(std::string err) {
-        std::cout << "Error doing task " << err << std::endl;
+        std::cout << "Error doing task from Worker " << this->id << "Error: " << err << std::endl;
         this->available = true;
         
         return;

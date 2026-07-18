@@ -1,4 +1,4 @@
-#include "socket.h"
+#include "socket.hpp"
 
 void initWinSock(){
     //NOTE: Function caller must call WSACleanup

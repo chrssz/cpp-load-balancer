@@ -10,9 +10,9 @@ class Worker{
     private:
         std::atomic<bool> available = true;
         std::jthread thread;
-
+        int id;
     public:
-        Worker();
+        Worker(int id);
         bool isAvailable();
         void doTask(std::function<void()> &&task);
         ~Worker();

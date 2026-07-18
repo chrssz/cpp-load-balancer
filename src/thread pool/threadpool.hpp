@@ -7,7 +7,7 @@
 #include<queue>
 #include<functional>
 
-#include "worker.h"
+#include "worker.hpp"
 
 class ThreadPool{
     private:
@@ -16,7 +16,7 @@ class ThreadPool{
         
     public:
         ThreadPool(int workerSize);
-        void start();
+        std::function<void()> getTask();
         void enqueue(std::function<void()> task);
         
         ~ThreadPool(){}

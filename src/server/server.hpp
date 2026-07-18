@@ -3,8 +3,8 @@
 
 #include <iostream>
 #include <memory>
-#include "socket.h"
-#include "threadpool.h"
+#include "../socket/socket.hpp"
+#include "../thread pool/threadpool.hpp"
 
 class Server {
     private:
