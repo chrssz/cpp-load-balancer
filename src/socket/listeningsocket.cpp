@@ -18,17 +18,19 @@ void ListeningSocket::bindSocket() {
     hints.ai_flags = AI_PASSIVE;
     addrinfo* result = nullptr;
     
-    getaddrinfo(nullptr, "80", &hints, &result);
+    int ret = getaddrinfo(nullptr, "80", &hints, &result);
     
-    if(result != 0) {
+    if(ret != 0) {
         std::cout << "Failed to bind to Listening Socket " << WSAGetLastError() << std::endl;
         freeaddrinfo(result);
         WSACleanup();
+        return;
     }
     
     if(bind(this->s, result->ai_addr, result->ai_addrlen) == SOCKET_ERROR){
         std::cout << "Bind failed! " << WSAGetLastError() << std::endl;
         freeaddrinfo(result);
+        return;
     }
 
     freeaddrinfo(result);

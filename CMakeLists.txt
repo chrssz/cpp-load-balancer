@@ -12,7 +12,7 @@ add_executable(cpp_load_balancer
     src/socket/connectedsocket.cpp
     src/socket/listeningsocket.cpp
     src/threadpool/threadpool.cpp
-    src/threadpool/worker.cpp
+
 )
 
 target_include_directories(cpp_load_balancer
@@ -22,3 +22,7 @@ target_include_directories(cpp_load_balancer
         threadpool
         utils
 )
+
+if(WIN32)
+    target_link_libraries(cpp_load_balancer PRIVATE ws2_32)
+endif()

@@ -3,15 +3,15 @@
 Server::Server(): threads(ThreadPool(10)){}
 
 void Server::start(){
+    initWinSock();
     ListeningSocket listen;
     
-    initWinSock();
-
     if(listen.setup() == -1){
         std::cout << "Error starting server" << std::endl;
+        WSACleanup();
         return;
-    }
-
+    }   
+    
     WSAPOLLFD poll_fd{};
     poll_fd.fd = listen.getSocket();
     poll_fd.events = POLLRDNORM;

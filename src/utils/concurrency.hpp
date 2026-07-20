@@ -1,7 +1,8 @@
 #pragma once
 
 #include <queue>
-
+#include <mutex>
+#include <condition_variable>
 /*A collection of utils for Concurrency Programming*/
 
 namespace utils::concurrency{
@@ -10,8 +11,15 @@ namespace utils::concurrency{
     class ThreadSafeQueue{
         private:
             std::queue<T> queue;
+            std::mutex mtx;
+            
+            std::condition_variable_any cv;
         public:
             ThreadSafeQueue();
+            bool empty();
+            int size();
+            void push(T data);
+            T pop(std::stop_token stoken);
             ~ThreadSafeQueue();  
     };
 

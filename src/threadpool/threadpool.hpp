@@ -7,16 +7,17 @@
 #include<queue>
 #include<functional>
 
-#include "worker.hpp"
+#include "../utils/concurrency.hpp"
 
 class ThreadPool{
     private:
-        std::queue<std::function<void()>> tasks;
-        std::vector<Worker> workers;
-        
+        std::vector<std::jthread> workers;
+        utils::concurrency::ThreadSafeQueue<std::function<void()>> tasks;
+
     public:
         ThreadPool(int workerSize);
-        std::function<void()> getTask();
+        
+        std::function<void()> getTask(std::stop_token stoken);
         void enqueue(std::function<void()> task);
         ~ThreadPool();
         
