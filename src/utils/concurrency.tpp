@@ -5,5 +5,7 @@ namespace utils::concurrency{
     template<class T>
     ThreadSafeQueue<T>::ThreadSafeQueue() = default;
 
-
+    template<class T>
+    ThreadSafeQueue<T>::~ThreadSafeQueue() = default;
+    
 }

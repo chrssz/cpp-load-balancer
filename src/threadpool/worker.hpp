@@ -9,7 +9,6 @@
 class Worker{
     private:
         std::atomic<bool> available = true;
-        std::jthread thread;
         int id;
     public:
         Worker(int id);

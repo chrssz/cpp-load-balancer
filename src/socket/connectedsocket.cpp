@@ -1,4 +1,4 @@
-#include "socket.h"
+#include "socket.hpp"
 
 
 ConnectedSocket::ConnectedSocket(){
@@ -7,7 +7,7 @@ ConnectedSocket::ConnectedSocket(){
 ConnectedSocket::ConnectedSocket(SOCKET created) : SocketWrapper(created) {
 }
 int ConnectedSocket::send(){
-
+    return 0;
 }
 
 int ConnectedSocket::receive(){

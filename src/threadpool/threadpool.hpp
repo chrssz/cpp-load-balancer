@@ -18,7 +18,6 @@ class ThreadPool{
         ThreadPool(int workerSize);
         std::function<void()> getTask();
         void enqueue(std::function<void()> task);
-        
-        ~ThreadPool(){}
+        ~ThreadPool();
         
 };

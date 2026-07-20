@@ -1,6 +1,5 @@
 #pragma once
 
-#include <iostream>
 #include <queue>
 
 /*A collection of utils for Concurrency Programming*/
