@@ -22,9 +22,9 @@ ThreadPool::ThreadPool(int workerSize){
 std::function<void()> ThreadPool::getTask(std::stop_token stoken){
     auto task = this->tasks.pop(stoken);
 
-    if(task == nullptr){return []{};}
-
-    return task;
+    if(!task.has_value()){return []{};}
+    
+    return task.value();
 }
 void ThreadPool::enqueue(std::function<void()> task){
     this->tasks.push(std::move(task));

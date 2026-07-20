@@ -6,7 +6,6 @@
 #include<vector>
 #include<queue>
 #include<functional>
-
 #include "../utils/concurrency.hpp"
 
 class ThreadPool{

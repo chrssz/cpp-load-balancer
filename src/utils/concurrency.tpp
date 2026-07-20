@@ -10,9 +10,10 @@ namespace utils::concurrency{
     
     template<class T>
     int ThreadSafeQueue<T>::size(){
+        int size;
         {
             std::lock_guard<std::mutex> lock(this->mtx);
-            int size = this->queue.size();
+            size = this->queue.size();
         }
     
         return size;
@@ -22,13 +23,13 @@ namespace utils::concurrency{
     void ThreadSafeQueue<T>::push(T data){
         {
             std::lock_guard lock(this->mtx);
-            this->queue.push(data);
+            this->queue.push(std::move(data));
         }
         this->cv.notify_one();
     }
 
     template<class T>
-    T ThreadSafeQueue<T>::pop(std::stop_token stoken){
+    std::optional<T> ThreadSafeQueue<T>::pop(std::stop_token stoken){
         T output;
         {
             std::unique_lock<std::mutex> lock(this->mtx);
@@ -38,7 +39,7 @@ namespace utils::concurrency{
                 return this->queue.empty() == false;
             });
 
-            if(this->queue.empty()){return nullptr;}
+            if(this->queue.empty()){return std::nullopt;}
             
             output = std::move(this->queue.front());
             this->queue.pop();

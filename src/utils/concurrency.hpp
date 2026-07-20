@@ -3,6 +3,7 @@
 #include <queue>
 #include <mutex>
 #include <condition_variable>
+#include<optional>
 /*A collection of utils for Concurrency Programming*/
 
 namespace utils::concurrency{
@@ -19,7 +20,7 @@ namespace utils::concurrency{
             bool empty();
             int size();
             void push(T data);
-            T pop(std::stop_token stoken);
+            std::optional<T> pop(std::stop_token stoken);
             ~ThreadSafeQueue();  
     };
 
