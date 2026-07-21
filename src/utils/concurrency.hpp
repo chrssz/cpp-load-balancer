@@ -17,7 +17,6 @@ namespace utils::concurrency{
             std::condition_variable_any cv;
         public:
             ThreadSafeQueue();
-            bool empty();
             int size();
             void push(T data);
             std::optional<T> pop(std::stop_token stoken);

@@ -5,6 +5,7 @@
 #include <ws2tcpip.h>
 #include <windows.h>
 #include <cstddef>
+#include <string>
 void initWinSock();
 
 
@@ -22,13 +23,15 @@ class SocketWrapper {
 };
 
 class ListeningSocket : public SocketWrapper {
+    private:
+        std::string PORT;
     
     protected:
         void bindSocket();
         int setListen();
 
     public:
-        ListeningSocket();
+        ListeningSocket(std::string PORT_NUMBER);
         ~ListeningSocket();
 
         int setup();
@@ -39,7 +42,7 @@ class ConnectedSocket : public SocketWrapper {
     public:
         ConnectedSocket();
         ConnectedSocket(SOCKET created);
-        int send();
+        int snd();
         int receive();
         
         ~ConnectedSocket();

@@ -6,8 +6,16 @@ ConnectedSocket::ConnectedSocket(){
 }
 ConnectedSocket::ConnectedSocket(SOCKET created) : SocketWrapper(created) {
 }
-int ConnectedSocket::send(){
-    return 0;
+int ConnectedSocket::snd(){
+    std::string body = "Hello World";
+    std::string res = "HTTP/1.1 200 OK\r\n"
+                      "Content-Type: text/plain; charset=utf-8\r\n"
+                      "Content-Length: " + std::to_string(body.size()) + "\r\n"
+                      "Connection: close\r\n\r\n" 
+                      + body;
+            
+    send(this->s, res.c_str(), res.size(), 0);
+    return 1;
 }
 
 int ConnectedSocket::receive(){

@@ -3,7 +3,6 @@
 ThreadPool::ThreadPool(int workerSize){
     for(int i = 0; i < workerSize; ++i){
     
-
         std::jthread thread([this](std::stop_token stoken)
             {
                 while(true){

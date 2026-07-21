@@ -1,7 +1,7 @@
 #include "socket.hpp"
 
 
-ListeningSocket::ListeningSocket() {
+ListeningSocket::ListeningSocket(std::string port) : PORT(port) {
 }
 
 
@@ -18,7 +18,7 @@ void ListeningSocket::bindSocket() {
     hints.ai_flags = AI_PASSIVE;
     addrinfo* result = nullptr;
     
-    int ret = getaddrinfo(nullptr, "80", &hints, &result);
+    int ret = getaddrinfo(nullptr, this->PORT.c_str(), &hints, &result);
     
     if(ret != 0) {
         std::cout << "Failed to bind to Listening Socket " << WSAGetLastError() << std::endl;
@@ -34,7 +34,7 @@ void ListeningSocket::bindSocket() {
     }
 
     freeaddrinfo(result);
-    std::cout << "Successfull bind to Listening Socket" << std::endl;
+    std::cout << "Successfull bind to Listening Socket on port: " << this->PORT << std::endl;
 }
 
 

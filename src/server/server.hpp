@@ -8,11 +8,11 @@
 
 class Server {
     private:
-        std::vector<std::shared_ptr<SocketWrapper>> socks; //Manages all connected sockets.
         std::vector<WSAPOLLFD> poll_fds; //Required for WSAPolling.
-        ThreadPool threads; 
+        ThreadPool threadpool; 
+        
     public:
-        Server();
-        void start();
+        Server(int theadPoolSize);
+        void start(std::string PORT_NUMBER);
         ~Server();
 };
