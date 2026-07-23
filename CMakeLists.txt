@@ -12,7 +12,7 @@ add_executable(cpp_load_balancer
     src/socket/connectedsocket.cpp
     src/socket/listeningsocket.cpp
     src/threadpool/threadpool.cpp
-
+    src/httpparse/parse.cpp
 )
 
 target_include_directories(cpp_load_balancer
@@ -21,6 +21,7 @@ target_include_directories(cpp_load_balancer
         socket
         threadpool
         utils
+        httpparse
 )
 
 if(WIN32)

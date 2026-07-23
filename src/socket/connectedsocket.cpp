@@ -13,7 +13,7 @@ int ConnectedSocket::snd(){
                       "Content-Length: " + std::to_string(body.size()) + "\r\n"
                       "Connection: close\r\n\r\n" 
                       + body;
-            
+    
     send(this->s, res.c_str(), res.size(), 0);
     return 1;
 }
@@ -30,7 +30,7 @@ int ConnectedSocket::receive(){
         return -1;
     }
     std::cout << "Received data " << std::endl;
-
+    
     return 1;
 }
 ConnectedSocket::~ConnectedSocket(){
