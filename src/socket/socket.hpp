@@ -4,11 +4,8 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <windows.h>
-#include <cstddef>
 #include <string>
 void initWinSock();
-
-
 
 class SocketWrapper {
     protected:

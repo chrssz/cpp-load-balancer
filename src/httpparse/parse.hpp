@@ -1,15 +1,21 @@
+#pragma once
 #include <string>
+#include <unordered_map>
 struct Request{
-    std::string method; //Http
-
+    std::string method;      
+    std::string path;       
+    std::string version;     
+    std::unordered_map<std::string, std::string> headers;
+    std::string body;
+    bool valid = false;
 };
+
 class HttpParse{
     private:
 
     public:
         HttpParse();
-        std::string parse(std::byte buffer);
-
+        Request parse(std::string& buffer);
         ~HttpParse();
 
 };

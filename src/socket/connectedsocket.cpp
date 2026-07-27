@@ -20,16 +20,19 @@ int ConnectedSocket::snd(){
 
 int ConnectedSocket::receive(){
     
-    std::byte buffer[1024]; 
-
+    char buffer[4096] = {};
     
-    int received = recv(this->s, (char*)&buffer, sizeof(buffer), 0);
+   
+    int received = recv(this->s, buffer, sizeof(buffer), 0);
 
     if(received == 0 || received == SOCKET_ERROR){
         std::cout << "Problem receiving data " << WSAGetLastError() << std::endl;
         return -1;
     }
-    std::cout << "Received data " << std::endl;
+    std::string s(buffer, received);
+    //Call Parser; TODO..
+        
+    std::cout << "Received data complete. " << std::endl;
     
     return 1;
 }
