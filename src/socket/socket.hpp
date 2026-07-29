@@ -4,11 +4,10 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <windows.h>
-#include <cstddef>
 #include <string>
+#include "../httpparse/parse.hpp"
+
 void initWinSock();
-
-
 
 class SocketWrapper {
     protected:
