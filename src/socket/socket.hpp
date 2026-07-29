@@ -5,6 +5,8 @@
 #include <ws2tcpip.h>
 #include <windows.h>
 #include <string>
+#include "../httpparse/parse.hpp"
+
 void initWinSock();
 
 class SocketWrapper {

@@ -17,23 +17,38 @@ int ConnectedSocket::snd(){
     send(this->s, res.c_str(), res.size(), 0);
     return 1;
 }
-
+//Recieve will read and parse data line by line.
 int ConnectedSocket::receive(){
-    
     char buffer[4096] = {};
+    int received = 0;
+    std::string s;
     
-   
-    int received = recv(this->s, buffer, sizeof(buffer), 0);
 
-    if(received == 0 || received == SOCKET_ERROR){
-        std::cout << "Problem receiving data " << WSAGetLastError() << std::endl;
-        return -1;
+    while(true){
+        int received = recv(this->s, buffer, sizeof(buffer), 0);
+
+        if(received == 0 || received == SOCKET_ERROR){
+            std::cout << "Problem receiving data " << WSAGetLastError() << std::endl;
+            return -1;
+        }
+
+        s.append(buffer, received);
+        std::cout << "Received a stream of data!. " << std::endl;
+
+        if(s.find("\r\n\r\n") != std::string::npos) {
+            //Recieved data up to headers. Body not included.
+            break;
+        }
+
     }
-    std::string s(buffer, received);
-    //Call Parser; TODO..
-        
-    std::cout << "Received data complete. " << std::endl;
     
+
+    HttpParse parse;
+    std::string str(buffer);
+    Request parsed = parse.parse(str);
+    
+    std::cout << "Received data complete. " << std::endl;
+
     return 1;
 }
 ConnectedSocket::~ConnectedSocket(){
