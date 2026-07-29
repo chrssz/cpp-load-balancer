@@ -11,6 +11,7 @@ struct Request{
     bool valid = false;
 };
 
+
 std::ostream& operator<<(std::ostream& stream, const Request& r);
 
 class HttpParse{

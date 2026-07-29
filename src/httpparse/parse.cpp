@@ -1,4 +1,5 @@
 #include "parse.hpp"
+
 std::ostream& operator<<(std::ostream& stream, const Request& r) {
    stream << "Method: " << r.method << "\n"
           << "Path: " << r.path << "\n"
@@ -16,61 +17,38 @@ std::ostream& operator<<(std::ostream& stream, const Request& r) {
 }
 
 HttpParse::HttpParse(){}
-Request HttpParse::parse(std::string& buffer){
-   //TODO: Results from testing with curl, Fix below.
-   /*
-      Test case: curl -v -X POST http://localhost:80/ 
-      \  -H "Content-Type: application/json" \  -H "User-Agent: CppLoadBalancerTest" \  -d '{"test": "hello world"}'
-      --------------------------------------------------------------------------------------------
-      Path: Expected = localhost, Output = Host:localhost
-      Version: Expected = 1.1, Output = Accept: /
-      Body: Expected = {test: Hello World}, Output = {test:
 
-   */
-   //This is mandatory.
-   /*
-         Request Line: METHOD 
-         Host Path: //example.com
-         Version: 
-         Headers: e.g Content-Length
-         Body: data payload.
-   */
+Request HttpParse::parse(std::string& buffer){
    Request r{};
    const std::size_t END_LINE_OFFSET = 2;
    std::size_t i = 0;
    std::size_t endLine;
    std::size_t colonPos;
 
-   //Request, method line
+   //Request Line
    endLine = buffer.find("\r\n", i);
 
    if(endLine == std::string::npos){
       return r;
    }
 
-   r.method = slice_str(buffer, i, endLine);
+   std::string requestLine = slice_str(buffer, i, endLine);
 
-   //Host Path
-   i = endLine + END_LINE_OFFSET;
-   endLine = buffer.find("\r\n", i);
-
-   if(endLine == std::string::npos){
+   //Split request line by spaces into method, path, version
+   std::size_t firstSpace = requestLine.find(' ');
+   if(firstSpace == std::string::npos){
       return r;
    }
 
-   r.path = slice_str(buffer, i, endLine);
-
-   //Version
-   i = endLine + END_LINE_OFFSET;
-   endLine = buffer.find("\r\n", i);
-
-   if(endLine == std::string::npos){
+   std::size_t secondSpace = requestLine.find(' ', firstSpace + 1);
+   if(secondSpace == std::string::npos){
       return r;
    }
 
-   r.version = slice_str(buffer, i, endLine);
+   r.method  = slice_str(requestLine, 0, firstSpace);
+   r.path    = slice_str(requestLine, firstSpace + 1, secondSpace);
+   r.version = slice_str(requestLine, secondSpace + 1, requestLine.length());
 
-   //Move to first header
    i = endLine + END_LINE_OFFSET;
 
    //Headers
@@ -81,14 +59,12 @@ Request HttpParse::parse(std::string& buffer){
       if(endLine == std::string::npos){
          return r;
       }
-
       //Empty line means we reached the end of the headers
       if(endLine == i){
          i = endLine + END_LINE_OFFSET;
          break;
       }
 
-      //Find the colon separating the header key and value
       colonPos = buffer.find(":", i);
 
       //Invalid header
@@ -98,22 +74,17 @@ Request HttpParse::parse(std::string& buffer){
 
       std::string header_key = slice_str(buffer, i, colonPos);
       std::string header_val = slice_str(buffer, colonPos + 1, endLine);
-
-      //Remove leading whitespace from header
+      //Remove leading whitespace from header value
       if(!header_val.empty() && header_val[0] == ' '){
          header_val.erase(0, 1);
       }
-      
-      r.headers[header_key] = header_val;
 
-      //Move to next header
+      r.headers[header_key] = header_val;
       i = endLine + END_LINE_OFFSET;
    }
-
    //Anything after the blank line is body data
    r.body = slice_str(buffer, i, buffer.length());
 
-   //Successfully parsed request
    r.valid = true;
    std::cout << r << std::endl;
    return r;
@@ -131,7 +102,5 @@ std::string HttpParse::slice_str(std::string& s, int start, int endPos){
    
    return output;
 }
-
-
 
 HttpParse::~HttpParse(){}
