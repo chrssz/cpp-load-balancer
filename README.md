@@ -26,4 +26,10 @@ tasks to worker threads. Worker threads are initialize using jthreads.
 ### Thread Safe Queue (`src/utils/conccurency.h`)
 A thread safe queue that handles safe read/write access. Threads hold mutexes with locking capabilities from unique_lock for manual unlock/lock capabilities. Threads are also put on 'wait' using conditon variables cv.wait(), Once a task is queued up a thread is awoken using cv.notifyone(). std::stop_token utilized to flag any running threads to stop to allow for a clean shutdown.
 
+### Http Parser (`src/httpparse/parse.cpp`)
+A HTTP Parser which takes in stream of data recieved from a TCP connection, and returns a clean request which follows the HTTP 1.1 Grammar rules. 
+On parse() call it will begin extracting the request line, headers, and optional message body. If the request violates the expected grammar, it is marked as invalid.
+
+*Working on the response portion*
+
 ## Architecture Goal
