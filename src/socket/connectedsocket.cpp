@@ -7,14 +7,12 @@ ConnectedSocket::ConnectedSocket(){
 ConnectedSocket::ConnectedSocket(SOCKET created) : SocketWrapper(created) {
 }
 int ConnectedSocket::snd(){
-    std::string body = "Hello World";
-    std::string res = "HTTP/1.1 200 OK\r\n"
-                      "Content-Type: text/plain; charset=utf-8\r\n"
-                      "Content-Length: " + std::to_string(body.size()) + "\r\n"
-                      "Connection: close\r\n\r\n" 
-                      + body;
-    
-    send(this->s, res.c_str(), res.size(), 0);
+    HttpResponse http_response;
+    Response res = http_response.ok("Hello World!", "Greetings");
+
+    std::string res_str = http_response.build(res);
+
+    send(this->s, res_str.c_str(), res_str.size(), 0);
     return 1;
 }
 //Recieve will read and parse data line by line.

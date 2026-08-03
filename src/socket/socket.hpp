@@ -6,7 +6,7 @@
 #include <windows.h>
 #include <string>
 #include "../httpparse/parse.hpp"
-
+#include "../httpparse/response.hpp"
 void initWinSock();
 
 class SocketWrapper {
