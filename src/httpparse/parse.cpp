@@ -86,7 +86,7 @@ Request HttpParse::parse(std::string& buffer){
    r.body = slice_str(buffer, i, buffer.length());
 
    r.valid = true;
-   std::cout << r << std::endl;
+   
    return r;
 }
 

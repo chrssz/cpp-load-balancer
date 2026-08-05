@@ -14,6 +14,9 @@ add_executable(cpp_load_balancer
     src/threadpool/threadpool.cpp
     src/httpparse/parse.cpp
     src/httpparse/response.cpp
+    src/connectionhandler/connectionhandler.cpp
+    src/connectionhandler/httphandler.cpp
+    src/connectionhandler/loadbhandler.cpp
 )
 
 target_include_directories(cpp_load_balancer
@@ -23,6 +26,7 @@ target_include_directories(cpp_load_balancer
         threadpool
         utils
         httpparse
+        connectionhandler
     
 )
 

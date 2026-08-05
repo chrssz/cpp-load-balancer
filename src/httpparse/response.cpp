@@ -1,5 +1,20 @@
 #include "response.hpp"
 
+std::ostream& operator<<(std::ostream& stream, const Response& r) {
+   stream << "Version: " << r.version << "\n"
+          << "Status Code: " << r.statusCode << "\n"
+          << "Reason Phrase: " << r.reasonPhrase << "\n"
+          << "Headers:\n";
+   
+   for (const auto& [key, value] : r.headers) {
+       stream << "  " << key << ": " << value << "\n";
+   }
+   
+   stream << "Body:\n" << r.body;
+   
+   return stream;
+}
+
 HttpResponse::HttpResponse(){}
 std::string HttpResponse::build(Response& res){
     //Set the content length
@@ -21,6 +36,7 @@ std::string HttpResponse::build(Response& res){
     return output;
 
 }
+
 Response HttpResponse::ok(std::string body, std::string contentType){
     Response r;
     r.statusCode = 200;

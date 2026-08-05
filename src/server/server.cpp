@@ -29,14 +29,15 @@ void Server::start(std::string PORT_NUMBER){
        
         if(this->poll_fds[0].revents & POLLRDNORM){
             SOCKET new_conn = accept(listen.getSocket(), nullptr, nullptr);
+            
             if (new_conn != SOCKET_ERROR){
 
                 std::shared_ptr<ConnectedSocket> conn = std::make_shared<ConnectedSocket>(new_conn);
                 threadpool.enqueue(
                     [conn](){
                         //Conn task.
-                        conn->receive();
-                        conn->snd();
+                        HttpServerHandler connHandle;
+                        connHandle.handle(std::move(conn));
                     }
                 );
             }

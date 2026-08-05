@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <unordered_map>
+#include <ostream>
 struct Response{
     std::string version = "HTTP/1.1";
     int statusCode = 200;
@@ -8,6 +9,8 @@ struct Response{
     std::unordered_map<std::string, std::string> headers;
     std::string body;
 };
+
+std::ostream& operator<<(std::ostream& stream, const Response& r);
 
 class HttpResponse{
     public:

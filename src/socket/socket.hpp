@@ -41,8 +41,7 @@ class ConnectedSocket : public SocketWrapper {
     public:
         ConnectedSocket();
         ConnectedSocket(SOCKET created);
-        int snd();
-        int receive();
-        
+        int snd(std::string& data);
+        std::string receive();
         ~ConnectedSocket();
 };
