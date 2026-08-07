@@ -8,6 +8,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_executable(cpp_load_balancer
     src/main.cpp
     src/server/server.cpp
+    src/server/httpserver.cpp
+    src/server/loadbalserver.cpp
     src/socket/socket.cpp
     src/socket/connectedsocket.cpp
     src/socket/listeningsocket.cpp
@@ -17,6 +19,7 @@ add_executable(cpp_load_balancer
     src/connectionhandler/connectionhandler.cpp
     src/connectionhandler/httphandler.cpp
     src/connectionhandler/loadbhandler.cpp
+
 )
 
 target_include_directories(cpp_load_balancer

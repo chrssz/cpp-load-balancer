@@ -7,7 +7,8 @@ class ConnectionHandler{
     public:
         ConnectionHandler();
         virtual void handle(std::shared_ptr<ConnectedSocket> conn) = 0;
-        virtual Response handleRequest(const Request& req) = 0;
+        //Handles a request, and creates a response.
+        Response handleRequest(const Request& req);
         ~ConnectionHandler();
 };
 
@@ -15,7 +16,6 @@ class HttpServerHandler : public ConnectionHandler{
     public:
         HttpServerHandler();
         void handle(std::shared_ptr<ConnectedSocket> conn) override;
-        Response handleRequest(const Request& req) override;
         ~HttpServerHandler();
 };
 
