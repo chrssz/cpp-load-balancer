@@ -4,6 +4,7 @@
 HttpServer::HttpServer(int threadPoolSize) : threadpool(ThreadPool(threadPoolSize)){}
 
 void HttpServer::start(std::string PORT_NUMBER){
+    this->port_number = PORT_NUMBER;
     ListeningSocket listen(PORT_NUMBER);
     
     if(listen.setup() == -1){

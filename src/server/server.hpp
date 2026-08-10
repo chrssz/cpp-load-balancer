@@ -7,18 +7,20 @@
 #include "../connectionhandler/connectionhandler.hpp"
 
 class Server {
+    protected:
+        std::string port_number;
+        std::vector<WSAPOLLFD> poll_fds; //Required for WSAPolling.
     public:
         Server();
         virtual void start(std::string PORT_NUMBER);
+        int getConnCount();
+        std::string getPort();
         ~Server();
 };
 
 class HttpServer : public Server {
     private:
-        private:
-        std::vector<WSAPOLLFD> poll_fds; //Required for WSAPolling.
         ThreadPool threadpool; 
-    
     public:
         HttpServer(int theadPoolSize);
         void start(std::string PORT_NUMBER) override;
@@ -26,8 +28,6 @@ class HttpServer : public Server {
 };
 
 class LoadBalServer : public Server{
-    private:
-        std::vector<WSAPOLLFD> poll_fds;
     public:
         LoadBalServer();
         void start(std::string PORT_NUMBER) override;

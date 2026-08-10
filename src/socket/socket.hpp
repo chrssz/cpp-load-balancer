@@ -32,7 +32,6 @@ class ListeningSocket : public SocketWrapper {
     public:
         ListeningSocket(std::string PORT_NUMBER);
         ~ListeningSocket();
-
         int setup();
 };
 

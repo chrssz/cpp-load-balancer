@@ -37,5 +37,6 @@ std::string ConnectedSocket::receive(){
 
     return output;
 }
+
 ConnectedSocket::~ConnectedSocket(){
 }

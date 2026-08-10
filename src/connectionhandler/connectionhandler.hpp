@@ -3,6 +3,8 @@
 #include "../httpparse/parse.hpp"
 #include "../httpparse/response.hpp"
 
+class HttpServer; //Forward Declaration, so we can take in the server list as parameters.
+
 class ConnectionHandler{
     public:
         ConnectionHandler();
@@ -20,8 +22,15 @@ class HttpServerHandler : public ConnectionHandler{
 };
 
 class LoadBalanceHandler : public ConnectionHandler{
+    private:
+        //Temporary for now
+        int roundRobinPtr = 0;
+        //Algorithms for choosing a server
+        HttpServer& roundRobin(std::vector<HttpServer>& servers);
     public:
         LoadBalanceHandler();
+        SOCKET getOutBoundConnection(std::string port_number);
         void handle(std::shared_ptr<ConnectedSocket> conn) override;
+        void handle(std::shared_ptr<ConnectedSocket> conn,std::vector<HttpServer>& servers);
         ~LoadBalanceHandler();
 };
