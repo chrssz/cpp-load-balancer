@@ -2,9 +2,8 @@
 
 #include <iostream>
 #include <memory>
+#include<vector>
 #include "../socket/socket.hpp"
-#include "../threadpool/threadpool.hpp"
-#include "../connectionhandler/connectionhandler.hpp"
 
 class Server {
     protected:
@@ -16,20 +15,4 @@ class Server {
         int getConnCount();
         std::string getPort();
         ~Server();
-};
-
-class HttpServer : public Server {
-    private:
-        ThreadPool threadpool; 
-    public:
-        HttpServer(int theadPoolSize);
-        void start(std::string PORT_NUMBER) override;
-        ~HttpServer();    
-};
-
-class LoadBalServer : public Server{
-    public:
-        LoadBalServer();
-        void start(std::string PORT_NUMBER) override;
-        ~LoadBalServer();
 };

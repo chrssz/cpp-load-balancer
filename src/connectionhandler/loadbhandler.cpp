@@ -1,14 +1,43 @@
-#include "connectionhandler.hpp"
+#include "loadbhandler.hpp"
 
 LoadBalanceHandler::LoadBalanceHandler(){}
-SOCKET LoadBalanceHandler::getOutBoundConnection(std::string port_number){
+std::unique_ptr<ConnectedSocket> LoadBalanceHandler::getOutBoundConnection(std::string port_number){
     //TODO;
+    addrinfo hints{};
+    hints.ai_family = AF_INET;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_protocol = IPPROTO_TCP;
+    addrinfo* result = nullptr;
+    int ret = getaddrinfo(nullptr, port_number.c_str(), &hints, &result);
+        
+    if(ret != 0){
+        std::cout << "Failed to create out bound connection" << std::endl;
+        return std::make_unique<ConnectedSocket>(INVALID_SOCKET);
+    }
+
+    SOCKET new_conn = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
+    
+    if(new_conn == INVALID_SOCKET){
+        freeaddrinfo(result);
+        return std::make_unique<ConnectedSocket>(INVALID_SOCKET);
+    }
+
+    if(connect(new_conn, result->ai_addr, result->ai_addrlen) == SOCKET_ERROR){
+        closesocket(new_conn);
+        freeaddrinfo(result);
+        return std::make_unique<ConnectedSocket>(INVALID_SOCKET);
+    }
+
+    freeaddrinfo(result);
+    
+    return std::make_unique<ConnectedSocket>(new_conn);
 }
 HttpServer& LoadBalanceHandler::roundRobin(std::vector<HttpServer>& servers){
     //Simple algorithm; will move algorithms to their own class
     HttpServer& toReturn = servers[this->roundRobinPtr];
     
     this->roundRobinPtr = (this->roundRobinPtr + 1) % servers.size();
+
     return toReturn;
 }
 void LoadBalanceHandler::handle(std::shared_ptr<ConnectedSocket> conn){
@@ -17,7 +46,15 @@ void LoadBalanceHandler::handle(std::shared_ptr<ConnectedSocket> conn){
 void LoadBalanceHandler::handle(std::shared_ptr<ConnectedSocket> conn, std::vector<HttpServer>& servers){
     std::cout << "Load balancer handling new connection!";
     //We need to assign this connection to a server using a algorithm.
-    HttpServer& s = roundRobin(servers);
+    HttpServer& server = roundRobin(servers);
+    std::string port_num = server.getPort();
+    
+    std::unique_ptr<ConnectedSocket> outBoundConn = std::move(getOutBoundConnection(port_num));
+
+    if(outBoundConn->getSocket() == INVALID_SOCKET){
+        //Send back an error through conn
+
+    }
     
 }
 

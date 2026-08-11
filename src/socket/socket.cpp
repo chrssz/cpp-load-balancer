@@ -18,7 +18,6 @@ void initWinSock(){
 SOCKET SocketWrapper::createSocket() {
     return socket(AF_INET, SOCK_STREAM, 0);
 }
-
 SOCKET SocketWrapper::getSocket(){
     return this->s;
 }

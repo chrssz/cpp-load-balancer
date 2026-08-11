@@ -1,4 +1,4 @@
-#include "server.hpp"
+#include "loadbalserver.hpp"
 
 LoadBalServer::LoadBalServer(){}
 void LoadBalServer::start(std::string PORT_NUMBER){
