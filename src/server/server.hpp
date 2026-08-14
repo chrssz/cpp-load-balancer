@@ -1,19 +1,22 @@
-
 #pragma once
 
 #include <iostream>
 #include <memory>
+#include<vector>
 #include "../socket/socket.hpp"
-#include "../threadpool/threadpool.hpp"
-#include "../connectionhandler/connectionhandler.hpp"
 
 class Server {
-    private:
-        std::vector<WSAPOLLFD> poll_fds; //Required for WSAPolling.
-        ThreadPool threadpool; 
-    
+    protected:
+        int id;
+        int total_connections = 0;
+        int current_connections = 0;
+        std::string port_number;
+        
     public:
-        Server(int theadPoolSize);
-        void start(std::string PORT_NUMBER);
-        ~Server();
+        Server(int id);
+        virtual void start(std::string PORT_NUMBER);
+        int getId();
+        int getTotalConns();
+        std::string getPort();
+        virtual ~Server();
 };
