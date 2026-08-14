@@ -25,11 +25,7 @@ void HttpServerHandler::handle(std::shared_ptr<ConnectedSocket> conn){
     //Parse data
     HttpParse p;
     Request req = p.parse(recieved);
-    std::cout << "Data Recieved" << std::endl;
-
-    std::cout << req << std::endl;
-
-    std::cout << "----------------------------------------------" << std::endl;
+    
     //Response
     HttpResponse responseObj; //Needed for building raw string
     Response response = handleRequest(req);
@@ -37,9 +33,6 @@ void HttpServerHandler::handle(std::shared_ptr<ConnectedSocket> conn){
 
     conn->snd(responseString);
     
-    std::cout << "Data sending back" << std::endl;
-    std::cout << response << std::endl;
-    std::cout << "----------------------------------------------" << std::endl;
 }
 
 HttpServerHandler::~HttpServerHandler(){}

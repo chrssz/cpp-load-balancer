@@ -7,10 +7,16 @@
 
 class Server {
     protected:
+        int id;
+        int total_connections = 0;
+        int current_connections = 0;
         std::string port_number;
+        
     public:
-        Server();
+        Server(int id);
         virtual void start(std::string PORT_NUMBER);
+        int getId();
+        int getTotalConns();
         std::string getPort();
-        ~Server();
+        virtual ~Server();
 };

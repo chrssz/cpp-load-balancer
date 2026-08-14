@@ -6,7 +6,7 @@ class HttpServer : public Server {
     private:
         ThreadPool threadpool; 
     public:
-        HttpServer(int theadPoolSize);
+        HttpServer(int id, int theadPoolSize);
         void start(std::string PORT_NUMBER) override;
         ~HttpServer();    
 };

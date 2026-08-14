@@ -32,21 +32,21 @@ std::unique_ptr<ConnectedSocket> LoadBalanceHandler::getOutBoundConnection(std::
     
     return std::make_unique<ConnectedSocket>(new_conn);
 }
-HttpServer& LoadBalanceHandler::roundRobin(std::vector<HttpServer>& servers){
+Server& LoadBalanceHandler::roundRobin(std::vector<std::unique_ptr<Server>>& servers){
     //Simple algorithm; will move algorithms to their own class
-    HttpServer& toReturn = servers[this->roundRobinPtr];
+    Server& toReturn = *servers[this->roundRobinPtr];
     
     this->roundRobinPtr = (this->roundRobinPtr + 1) % servers.size();
-
+    
     return toReturn;
 }
 void LoadBalanceHandler::handle(std::shared_ptr<ConnectedSocket> conn){
     std::cout << "Error handling connection, handle requires (conn, serverVector)" << std::endl;
 }
-void LoadBalanceHandler::handle(std::shared_ptr<ConnectedSocket> conn, std::vector<HttpServer>& servers){
-    std::cout << "Load balancer handling new connection!";
+void LoadBalanceHandler::handle(std::shared_ptr<ConnectedSocket> conn, std::vector<std::unique_ptr<Server>>& servers){
+    std::cout << "Load balancer handling new connection!" << std::endl;
     
-    HttpServer& server = roundRobin(servers); //Server assignment algorithm
+    Server& server = roundRobin(servers); //Server assignment algorithm
     std::string portNum = server.getPort();
 
     std::unique_ptr<ConnectedSocket> outBoundConn = std::move(getOutBoundConnection(portNum));

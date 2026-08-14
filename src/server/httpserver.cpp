@@ -1,6 +1,6 @@
 #include "httpserver.hpp"
 
-HttpServer::HttpServer(int threadPoolSize) : threadpool(ThreadPool(threadPoolSize)){}
+HttpServer::HttpServer(int id, int threadPoolSize) : Server(id), threadpool(ThreadPool(threadPoolSize)){}
 
 void HttpServer::start(std::string PORT_NUMBER){
     this->port_number = PORT_NUMBER;
@@ -28,6 +28,7 @@ void HttpServer::start(std::string PORT_NUMBER){
             SOCKET new_conn = accept(listen.getSocket(), nullptr, nullptr);
         
             if (new_conn != SOCKET_ERROR){
+                this->total_connections += 1;
                 std::shared_ptr<ConnectedSocket> conn = std::make_shared<ConnectedSocket>(new_conn);
                 threadpool.enqueue(
                     [conn](){
@@ -36,6 +37,8 @@ void HttpServer::start(std::string PORT_NUMBER){
                         connHandle.handle(std::move(conn));
                     }
                 );
+                std::cout << "Server : " << this->getId() << 
+                        ", Handled " << this->getTotalConns() << " total requests" << std::endl;
             }
         }
     }

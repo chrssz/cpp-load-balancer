@@ -8,11 +8,11 @@ class LoadBalanceHandler : public ConnectionHandler{
         //Temporary for now
         int roundRobinPtr = 0;
         //Algorithms for choosing a server
-        HttpServer& roundRobin(std::vector<HttpServer>& servers);
+        Server& roundRobin(std::vector<std::unique_ptr<Server>>& servers);
     public:
         LoadBalanceHandler();
         std::unique_ptr<ConnectedSocket> getOutBoundConnection(std::string port_number);
         void handle(std::shared_ptr<ConnectedSocket> conn) override;
-        void handle(std::shared_ptr<ConnectedSocket> conn,std::vector<HttpServer>& servers);
+        void handle(std::shared_ptr<ConnectedSocket> conn,std::vector<std::unique_ptr<Server>>& servers);
         ~LoadBalanceHandler();
 };

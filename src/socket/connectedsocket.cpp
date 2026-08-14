@@ -25,7 +25,7 @@ std::string ConnectedSocket::receive(){
         }
 
         output.append(buffer, received);
-        std::cout << "Received a stream of data!. " << std::endl;
+        
 
         if(output.find("\r\n\r\n") != std::string::npos) {
             //Recieved data up to headers. Body not included.
@@ -33,6 +33,7 @@ std::string ConnectedSocket::receive(){
         }
 
     }
+    
     std::cout << "Received data complete. " << std::endl;
 
     return output;
