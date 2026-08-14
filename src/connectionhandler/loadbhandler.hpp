@@ -1,6 +1,7 @@
 #pragma once
 #include "connectionhandler.hpp"
 #include "../server/httpserver.hpp"
+#include "../httpparse/response.hpp"
 
 class LoadBalanceHandler : public ConnectionHandler{
     private:

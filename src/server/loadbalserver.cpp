@@ -14,18 +14,17 @@ void LoadBalServer::start(std::string PORT_NUMBER){
     poll_fd.fd = listen.getSocket();
     poll_fd.events = POLLRDNORM;
     
-    this->poll_fds.push_back(std::move(poll_fd));
     LoadBalanceHandler connHandle;
     
     while(true){
         //Thread waits here for connection
-        int event = WSAPoll(this->poll_fds.data(), this->poll_fds.size(), -1);
+        int event = WSAPoll(&poll_fd, 1, -1);
         if(event == SOCKET_ERROR){
             std::cout << "WSAPOll failed with error: " << WSAGetLastError() << std::endl;
             break;
         }
         
-        if(this->poll_fds[0].revents & POLLRDNORM){
+        if(poll_fd.revents & POLLRDNORM){
             SOCKET new_conn = accept(listen.getSocket(), nullptr, nullptr);
             
             if (new_conn != SOCKET_ERROR){

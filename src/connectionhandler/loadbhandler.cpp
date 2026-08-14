@@ -45,16 +45,29 @@ void LoadBalanceHandler::handle(std::shared_ptr<ConnectedSocket> conn){
 }
 void LoadBalanceHandler::handle(std::shared_ptr<ConnectedSocket> conn, std::vector<HttpServer>& servers){
     std::cout << "Load balancer handling new connection!";
-    //We need to assign this connection to a server using a algorithm.
-    HttpServer& server = roundRobin(servers);
-    std::string port_num = server.getPort();
     
-    std::unique_ptr<ConnectedSocket> outBoundConn = std::move(getOutBoundConnection(port_num));
+    HttpServer& server = roundRobin(servers); //Server assignment algorithm
+    std::string portNum = server.getPort();
+
+    std::unique_ptr<ConnectedSocket> outBoundConn = std::move(getOutBoundConnection(portNum));
 
     if(outBoundConn->getSocket() == INVALID_SOCKET){
-        //Send back an error through conn
-
+        //Send back an error to client
+        HttpResponse r;
+        Response resObj = r.badRequest("Error connecting to reverse proxy");
+        std::string resString = r.build(resObj);
+        
+        conn->snd(resString);
+        return;
     }
+
+    std::string dataFromClient = conn->receive();
+
+    outBoundConn->snd(dataFromClient);
+
+    std::string dataFromServer = outBoundConn->receive();
+
+    conn->snd(dataFromServer);
     
 }
 
