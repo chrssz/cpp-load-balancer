@@ -28,11 +28,17 @@ A thread safe queue that handles safe read/write access. Threads hold mutexes wi
 
 ### HTTP Layer (`src/http/`)
 
-**Parser (`HttpParse` + `Request`)**
-Takes in a raw stream of bytes received from a TCP connection and returns a structured `Request` object following HTTP/1.1 grammar rules. On `parse()` call it extracts the request line (method, path, version), headers, and optional message body. Requests violating the grammar are marked invalid. 
+- **`Parser (`HttpParse` + `Request`)`** — Takes in a raw stream of bytes received from a TCP connection and returns a structured `Request` object following HTTP/1.1 grammar rules. On `parse()` call it extracts the request line (method, path, version), headers, and optional message body. Requests violating the grammar are marked invalid. 
 
-**Response Builder (`HttpResponse` + `Response`)**
-Constructs a structured `Response` object back into a raw HTTP/1.1 string ready to be sent over a TCP socket. Automatically calculates `Content-Length` from the body and provides factory methods for common 
+- **`Response Builder (`HttpResponse` + `Response`)`** — Constructs a structured `Response` object back into a raw HTTP/1.1 string ready to be sent over a TCP socket. Automatically calculates `Content-Length` from the body and provides factory methods for common 
 responses: `ok()`, `badRequest()`, `notFound()`, `internalError()`, and `serviceUnavailable()`.
 
-## Architecture Goal
+### Connection Handling (`src/connectionhandler/`)
+Contains the handlers responsible for processing client connections and, when acting as a load balancer, forwarding HTTP traffic to backend servers.
+
+- **`HttpServerHandler`** — handles HTTP connections directly, used to represent a "http server". Recieves raw request data from a
+  `ConnectedSocket`, parses it using `HttpParse`, validates the HTTP method, builds an appropriate `HttpResponse` and sends it back
+  to the reverse proxy.
+- **`LoadBalanceHandler`** - acts as a basic reverse proxy and load balancer, soley responsible for taking incoming requests, and assigning it
+  to a http server. It selects a backend server using a basic round-robin algorithm, establishes an outbound TCP connection to the selected server
+  forwards the client's request, and then recieves a back end response, and sends the response back to the client.
