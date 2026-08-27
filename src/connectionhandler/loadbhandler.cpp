@@ -48,6 +48,7 @@ void LoadBalanceHandler::handle(std::shared_ptr<ConnectedSocket> conn, std::vect
     
     Server& server = roundRobin(servers); //Server assignment algorithm
     std::string portNum = server.getPort();
+  
 
     std::unique_ptr<ConnectedSocket> outBoundConn = std::move(getOutBoundConnection(portNum));
 
@@ -69,6 +70,7 @@ void LoadBalanceHandler::handle(std::shared_ptr<ConnectedSocket> conn, std::vect
 
     conn->snd(dataFromServer);
     
+    std::cout << "Load balancer sending data back to client Size: " << dataFromServer.size() << std::endl;
 }
 
 LoadBalanceHandler::~LoadBalanceHandler(){}
