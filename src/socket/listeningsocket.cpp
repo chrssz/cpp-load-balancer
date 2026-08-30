@@ -39,7 +39,7 @@ void ListeningSocket::bindSocket() {
 
 
 int ListeningSocket::setListen() {
-    return listen(s, 0);
+    return listen(s, SOMAXCONN);
 }
 
 

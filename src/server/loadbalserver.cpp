@@ -1,6 +1,6 @@
 #include "loadbalserver.hpp"
 
-LoadBalServer::LoadBalServer(int id) : Server(id){}
+LoadBalServer::LoadBalServer(int id, int threadPoolSize) : Server(id), threadpool(ThreadPool(threadPoolSize)){}
 
 void LoadBalServer::addServer(std::unique_ptr<Server> server){
     this->servers.push_back(std::move(server));
@@ -38,7 +38,15 @@ void LoadBalServer::start(std::string PORT_NUMBER){
 
                 std::shared_ptr<ConnectedSocket> conn = std::make_shared<ConnectedSocket>(new_conn);
                 //Load balancer will be singal threaded for now.
-                connHandle.handle(std::move(conn), this->servers);
+                // Not anymore after seeing those connection tests.
+                threadpool.enqueue(
+                    [conn = std::move(conn), this](){
+                        //Conn task.
+                        LoadBalanceHandler connHandle;
+                        connHandle.handle(std::move(conn), this->servers);
+                    }
+                );
+                
             }
             
         }

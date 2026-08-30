@@ -5,6 +5,7 @@
 
 class LoadBalanceHandler : public ConnectionHandler{
     private:
+        std::mutex mtx;
         //Temporary for now
         int roundRobinPtr = 0;
         //Algorithms for choosing a server
