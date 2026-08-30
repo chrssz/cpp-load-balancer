@@ -31,7 +31,7 @@ void HttpServer::start(std::string PORT_NUMBER){
                 this->total_connections += 1;
                 std::shared_ptr<ConnectedSocket> conn = std::make_shared<ConnectedSocket>(new_conn);
                 threadpool.enqueue(
-                    [conn](){
+                    [conn = std::move(conn)](){
                         //Conn task.
                         HttpServerHandler connHandle;
                         connHandle.handle(std::move(conn));

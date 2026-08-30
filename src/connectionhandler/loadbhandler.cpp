@@ -34,6 +34,8 @@ std::unique_ptr<ConnectedSocket> LoadBalanceHandler::getOutBoundConnection(std::
 }
 Server& LoadBalanceHandler::roundRobin(std::vector<std::unique_ptr<Server>>& servers){
     //Simple algorithm; will move algorithms to their own class
+    std::lock_guard<std::mutex> lock(this->mtx);
+    
     Server& toReturn = *servers[this->roundRobinPtr];
     
     this->roundRobinPtr = (this->roundRobinPtr + 1) % servers.size();
