@@ -2,15 +2,15 @@
 #include "server/loadbalserver.hpp"
 int main(){
     
-    int const THREAD_POOL_SIZE = 3;
+    int const THREAD_POOL_SIZE = 50;
     initWinSock();
     
-    LoadBalServer lb(50);
-
+    LoadBalServer lb(50, THREAD_POOL_SIZE);
+    
     //Adds http backend servers that the loadbalacner will choose from.
-    lb.addServer(std::make_unique<HttpServer>(1, 2));
-    lb.addServer(std::make_unique<HttpServer>(2, 2));
-    lb.addServer(std::make_unique<HttpServer>(3, 2));
+    lb.addServer(std::make_unique<HttpServer>(1, THREAD_POOL_SIZE));
+    lb.addServer(std::make_unique<HttpServer>(2, THREAD_POOL_SIZE));
+    lb.addServer(std::make_unique<HttpServer>(3, THREAD_POOL_SIZE));
     
     std::vector<std::unique_ptr<Server>>& server_list = lb.getServerList();
 
